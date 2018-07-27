@@ -18,7 +18,7 @@ import cn.songhaiqing.walle.ble.utils.BleUtil;
 public class BleActivity extends Activity implements View.OnClickListener {
     private final int REQUEST_BIND_DEVICE = 1;
 
-    private Button btnBleOption;
+    private Button btnDisconnect;
     private Button btnScan;
 
     @Override
@@ -34,9 +34,9 @@ public class BleActivity extends Activity implements View.OnClickListener {
 
         registerReceiver(bleReceiver, intentFilter);
 
-        btnBleOption = findViewById(R.id.btn_ble_option);
+        btnDisconnect = findViewById(R.id.btn_disconnect);
         btnScan = findViewById(R.id.btn_scan);
-        btnBleOption.setOnClickListener(this);
+        btnDisconnect.setOnClickListener(this);
         btnScan.setOnClickListener(this);
     }
 
@@ -84,7 +84,7 @@ public class BleActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(this, DeviceScanActivity.class);
                 startActivityForResult(intent, REQUEST_BIND_DEVICE);
                 break;
-            case R.id.btn_ble_option:
+            case R.id.btn_disconnect:
                 BleUtil.disConnect(this);
                 break;
         }

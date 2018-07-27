@@ -86,7 +86,7 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         mHandler = new Handler();
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.walle_ble_ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -96,7 +96,7 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.walle_ble_ble_not_supported, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -113,7 +113,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
             pbLoad.setVisibility(View.VISIBLE);
         }
     }
-
 
     private void initPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -288,7 +287,7 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
             if (deviceName != null && deviceName.length() > 0)
                 name.append(deviceName);
             else
-                name.append(R.string.unknown_device);
+                name.append(R.string.walle_ble_unknown_device);
             viewHolder.tvName.setText(name.toString());
             viewHolder.tvMacAddress.setText(device.getMacAddress());
             viewHolder.tvRssi.setText(device.getRssi() != null ? String.valueOf(device.getRssi()) : "");

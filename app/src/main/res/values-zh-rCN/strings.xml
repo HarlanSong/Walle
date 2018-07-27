@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Walle</string>
+    <string name="func_ble">蓝牙</string>
+    <string name="ble_scan">扫描</string>
+    <string name="ble_disconnect">断开连接</string>
+</resources>

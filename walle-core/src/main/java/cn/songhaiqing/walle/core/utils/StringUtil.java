@@ -1,6 +1,5 @@
 package cn.songhaiqing.walle.core.utils;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +9,6 @@ import java.util.List;
 
 public class StringUtil {
 
-
-    /**
-     * byte[] --> 十六进制的字符串
-     *
-     * @param bytes
-     * @return
-     */
     public static String bytesToHexStr(byte[] bytes) {
         StringBuilder stringBuilder = new StringBuilder("");
         if (bytes == null || bytes.length <= 0) {
