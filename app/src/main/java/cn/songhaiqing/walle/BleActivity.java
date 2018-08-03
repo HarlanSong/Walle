@@ -1,6 +1,5 @@
 package cn.songhaiqing.walle;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +13,9 @@ import android.widget.Toast;
 import cn.songhaiqing.walle.ble.activity.DeviceScanActivity;
 import cn.songhaiqing.walle.ble.service.WalleBleService;
 import cn.songhaiqing.walle.ble.utils.BleUtil;
+import cn.songhaiqing.walle.ui.activity.BaseActivity;
 
-public class BleActivity extends Activity implements View.OnClickListener {
+public class BleActivity extends BaseActivity implements View.OnClickListener {
     private final int REQUEST_BIND_DEVICE = 1;
 
     private Button btnDisconnect;
@@ -26,6 +26,7 @@ public class BleActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ble);
 
+        initTitle(this, getString(R.string.title_walle_bluetooth), null);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WalleBleService.ACTION_CONNECTED_SUCCESS);
@@ -64,7 +65,6 @@ public class BleActivity extends Activity implements View.OnClickListener {
             String name = data.getStringExtra("name");
             String macAddress = data.getStringExtra("macAddress");
             Toast.makeText(this, "name:" + name + " macAddress:" + macAddress, Toast.LENGTH_LONG).show();
-
             BleUtil.connectDevice(this, name, macAddress);
         }
     }

@@ -26,9 +26,6 @@ import cn.songhaiqing.walle.ble.utils.BleUtil;
 import cn.songhaiqing.walle.core.utils.LogUtil;
 import cn.songhaiqing.walle.core.utils.StringUtil;
 
-/**
- * 蓝牙连接基础类
- */
 public class WalleBleService extends Service {
     private final String TAG = getClass().getName();
 
@@ -213,7 +210,7 @@ public class WalleBleService extends Service {
         if (!initialize()) {
             return false;
         }
-        LogUtil.d(TAG, "开始连接手环：" + address);
+        LogUtil.d(TAG, "Start connect device,macAddress:" + address);
         artificialDisconnect = false;
         if (mBluetoothAdapter == null || address == null) {
             LogUtil.w(TAG, "BluetoothAdapter not initialized or unspecified address.");

@@ -3,4 +3,5 @@
     <string name="func_ble">Bluetooth</string>
     <string name="ble_scan">Scan</string>
     <string name="ble_disconnect">Disconnect</string>
+    <string name="title_walle_bluetooth">Walle bluetooth</string>
 </resources>
