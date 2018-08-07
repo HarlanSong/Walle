@@ -210,6 +210,9 @@ public class WalleBleService extends Service {
         if (!initialize()) {
             return false;
         }
+        if(BleUtil.bleConnected && address.equals(mBluetoothDeviceAddress)){
+            return true;
+        }
         LogUtil.d(TAG, "Start connect device,macAddress:" + address);
         artificialDisconnect = false;
         if (mBluetoothAdapter == null || address == null) {

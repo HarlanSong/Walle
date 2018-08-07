@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import cn.songhaiqing.walle.ble.service.WalleBleService;
+import cn.songhaiqing.walle.core.utils.LogUtil;
 
 public class BleUtil {
     public static boolean bleConnected = false;
@@ -11,14 +12,20 @@ public class BleUtil {
     public static boolean connectDevice(final Context context, String name, final String address) {
         Intent intent = new Intent(context,WalleBleService.class);
         context.startService(intent);
-        new Handler().postDelayed(new Runnable() {
+        new Thread(){
             @Override
             public void run() {
+                super.run();
+                try {
+                    sleep(100);
+                } catch (InterruptedException e) {
+                    LogUtil.e("BleUtil", e.getMessage());
+                }
                 Intent intent = new Intent(WalleBleService.ACTION_CONNECT_DEVICE);
                 intent.putExtra(WalleBleService.EXTRA_DATA, address);
                 context.sendBroadcast(intent);
             }
-        }, 100);
+        }.start();
         return true;
     }
 
