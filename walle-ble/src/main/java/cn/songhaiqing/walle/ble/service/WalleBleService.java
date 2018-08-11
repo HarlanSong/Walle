@@ -18,7 +18,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -66,6 +65,8 @@ public class WalleBleService extends Service {
 
     private boolean operationDone = true;
     private boolean artificialDisconnect = true;
+    private final int maxReconnectionNumber = 3;
+    private  int reconnectionNumber = 0;
 
     @Override
     public void onCreate() {
@@ -90,6 +91,7 @@ public class WalleBleService extends Service {
                 disconnect();
             } else if (ACTION_CONNECT_DEVICE.equals(action)) {
                 String address = intent.getStringExtra(EXTRA_DATA);
+                reconnectionNumber = 0;
                 connect(address);
             } else if (ACTION_READ_BLE.equals(action)) {
                 String serviceUUID = intent.getStringExtra(EXTRA_DATA_READ_SERVICE_UUID);
@@ -124,17 +126,6 @@ public class WalleBleService extends Service {
                 BleUtil.bleConnected = false;
                 LogUtil.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
-                if (!artificialDisconnect && !TextUtils.isEmpty(mBluetoothDeviceAddress)) {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!artificialDisconnect && !TextUtils.isEmpty(mBluetoothDeviceAddress)) {
-                                LogUtil.d(TAG, "Start automatically reconnecting.");
-                                connect(mBluetoothDeviceAddress);
-                            }
-                        }
-                    }, 5000);
-                }
             }
         }
 
@@ -257,7 +248,8 @@ public class WalleBleService extends Service {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!artificialDisconnect && !isConnected() && !TextUtils.isEmpty(mBluetoothDeviceAddress)) {
+                if (!artificialDisconnect && !isConnected() && !TextUtils.isEmpty(mBluetoothDeviceAddress) && reconnectionNumber < maxReconnectionNumber) {
+                    reconnectionNumber++;
                     connect(mBluetoothDeviceAddress);
                 }
             }

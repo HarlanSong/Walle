@@ -2,7 +2,6 @@ package cn.songhaiqing.walle.ble.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import cn.songhaiqing.walle.ble.service.WalleBleService;
 import cn.songhaiqing.walle.core.utils.LogUtil;
 
