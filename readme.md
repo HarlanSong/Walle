@@ -16,7 +16,7 @@ implementation 'cn.songhaiqing.walle.core:walle-core:1.0.0'
 
 `walle-ble`通过主要功能在WalleBleService中完成，通过广播与service通讯。
 
-#### 使用
+#### 引入
 ```
 implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.2'
 ```
@@ -25,11 +25,13 @@ implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.2'
 
 **打开扫描界面**
 
+![扫描设备](https://github.com/HarlanSong/Walle/tree/master/images/bleScan.jpg)
+
 ```java
 Intent intent = new Intent(this, DeviceScanActivity.class);
 startActivityForResult(intent, REQUEST_BIND_DEVICE);
 ```
-*REQUEST_BIND_DEVICE 自行定义回调常量（int） *
+*REQUEST_BIND_DEVICE 自行定义回调常量（int）*
 
 **选择蓝牙设置成功回调,并连接设备**
 
@@ -111,7 +113,7 @@ BleUtil.bleConnected
 
 **配置**
 
-```
+```java
 // Log前缀，默认为“Walle”
 WalleConfig.setLogTag(String tag);
 // 是否开户DEBUG模式，默认false
