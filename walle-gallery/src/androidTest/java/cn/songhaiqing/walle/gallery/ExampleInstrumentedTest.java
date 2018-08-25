@@ -1,4 +1,4 @@
-package cn.songhaiqing.walle.core;
+package cn.songhaiqing.walle.gallery;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("cn.songhaiqing.walle.core.test", appContext.getPackageName());
+        assertEquals("cn.songhaiqing.walle.gallery.test", appContext.getPackageName());
     }
 }

@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".BleActivity"/>
+        <activity android:name=".ChoosePhotoActivity"/>
 
     </application>
 

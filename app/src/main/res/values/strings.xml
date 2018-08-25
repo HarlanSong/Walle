@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Walle</string>
     <string name="func_ble">Bluetooth</string>
+    <string name="func_choose_photo">Choose Photo</string>
     <string name="ble_scan">Scan</string>
     <string name="ble_disconnect">Disconnect</string>
     <string name="title_walle_bluetooth">Walle bluetooth</string>

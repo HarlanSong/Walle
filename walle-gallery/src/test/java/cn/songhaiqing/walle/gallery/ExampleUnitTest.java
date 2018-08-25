@@ -1,4 +1,4 @@
-package cn.songhaiqing.walle.core;
+package cn.songhaiqing.walle.gallery;
 
 import org.junit.Test;
 

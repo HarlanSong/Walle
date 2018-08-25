@@ -1,1 +1,1 @@
-include ':app', ':walle-core', ':walle-ui', ':walle-ble'
+include ':app', ':walle-core', ':walle-ui', ':walle-ble', ':walle-gallery'
