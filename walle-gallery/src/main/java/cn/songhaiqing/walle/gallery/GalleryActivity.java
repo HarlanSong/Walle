@@ -1,20 +1,17 @@
 package cn.songhaiqing.walle.gallery;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.GridView;
-
+import org.xutils.view.annotation.ContentView;
 import org.xutils.x;
-
 import java.util.ArrayList;
 import java.util.List;
 import cn.songhaiqing.walle.ui.activity.BaseActivity;
@@ -26,7 +23,7 @@ public class GalleryActivity extends BaseActivity {
     private final int PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 0;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         x.Ext.init(getApplication());
         x.Ext.setDebug(true);
@@ -53,7 +50,6 @@ public class GalleryActivity extends BaseActivity {
         return true;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private List<GalleryImage> queryImage() {
         List<GalleryImage> images = new ArrayList<>();
         if (!validPermission()) {
@@ -67,7 +63,7 @@ public class GalleryActivity extends BaseActivity {
                 MediaStore.Files.FileColumns.DATA, // 文件路径
                 MediaStore.Files.FileColumns.SIZE, // 文件大小
                 MediaStore.Files.FileColumns.DATE_MODIFIED}; // 修改日期
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, MediaStore.Files.FileColumns.DATE_MODIFIED + " desc");
+        Cursor cursor =  getContentResolver().query(uri, projection, null, null, MediaStore.Files.FileColumns.DATE_MODIFIED + " desc");
         if (cursor == null) {
             return images;
         }

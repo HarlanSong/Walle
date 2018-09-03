@@ -55,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
             findViewById(R.id.ib_title_bar_back).setVisibility(View.GONE);
         }
         ((TextView) findViewById(R.id.tv_title_bar_title)).setText(title);
-        ImageButton ibOption = findViewById(R.id.ib_option);
+        ImageButton ibOption = (ImageButton) findViewById(R.id.ib_option);
         if (optionImage != null) {
             ibOption.setVisibility(View.VISIBLE);
             Drawable drawable = ContextCompat.getDrawable(getBaseContext(), optionImage);

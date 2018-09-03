@@ -15,7 +15,7 @@ public class ProgressDialogUtil {
         progressDialog.show();
     }
 
-    public static void dimiss(){
+    public static void dismiss(){
         if(progressDialog == null || !progressDialog.isShowing()){
             return;
         }
