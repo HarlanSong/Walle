@@ -19,7 +19,7 @@ implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.4'
 ## 使用文档
 ### 打开扫描界面
 
-![Walle](https://github.com/HarlanSong/Walle/tree/master/images/bleScan.jpg)
+![BleScan](https://github.com/HarlanSong/Walle/tree/master/images/bleScan.png)
 
 ```java
 Intent intent = new Intent(this, DeviceScanActivity.class);
