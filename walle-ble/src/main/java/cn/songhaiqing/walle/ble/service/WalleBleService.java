@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -444,8 +443,6 @@ public class WalleBleService extends Service {
             operationDone = true;
         }
     }
-
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;

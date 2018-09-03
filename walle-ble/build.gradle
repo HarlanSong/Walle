@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
-/*apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.0.3"*/
+version = "1.0.4"
 
 android {
     compileSdkVersion 27
@@ -11,7 +11,6 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -24,14 +23,9 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    /*implementation 'cn.songhaiqing.walle.core:walle-core:1.0.0'*/
-    implementation project(':walle-core')
+    implementation 'cn.songhaiqing.walle.core:walle-core:1.0.0'
+   /* implementation project(':walle-core')*/
 }
-/*
 def siteUrl = 'https://github.com/HarlanSong'
 def gitUrl = 'https://github.com/HarlanSong'
 group = "cn.songhaiqing.walle.ble"
@@ -101,4 +95,3 @@ bintray {
         publish = true
     }
 }
-*/

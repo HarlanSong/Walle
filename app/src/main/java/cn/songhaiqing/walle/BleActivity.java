@@ -58,7 +58,7 @@ public class BleActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK && REQUEST_BIND_DEVICE == requestCode) {
+        if (resultCode == RESULT_OK && REQUEST_BIND_DEVICE == requestCode) {
             String name = data.getStringExtra("name");
             String macAddress = data.getStringExtra("macAddress");
             Toast.makeText(this, "name:" + name + " macAddress:" + macAddress, Toast.LENGTH_LONG).show();
