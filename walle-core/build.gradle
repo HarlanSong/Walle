@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 
-apply plugin: 'com.github.dcendents.android-maven'
+/*apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.0.1"
+version = "1.0.1"*/
 android {
     compileSdkVersion 27
 
@@ -23,6 +23,7 @@ android {
 dependencies {
 
 }
+/*
 
 def siteUrl = 'https://github.com/HarlanSong'
 def gitUrl = 'https://github.com/HarlanSong'
@@ -92,3 +93,4 @@ bintray {
         publish = true
     }
 }
+*/
