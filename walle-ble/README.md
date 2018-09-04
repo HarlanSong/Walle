@@ -5,7 +5,7 @@
 ### Gradle 引入库
 
 ```groovy
-implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.4'
+implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.5'
 ```
 
 ### 添加权限
@@ -60,9 +60,9 @@ BleUtil.disConnect(this);
             } else if (WalleBleService.ACTION_GATT_DISCONNECTED.equals(action)) {
 
             } else if (WalleBleService.ACTION_DEVICE_RESULT.equals(action)) {
-				String uuid = intent.getStringExtra("uuid");
-				ArrayList<Integer> dataArray = intent.getIntegerArrayListExtra("data");
-				byte[] srcData = intent.getByteArrayExtra("srcData");
+				      String uuid = intent.getStringExtra("uuid");
+							ArrayList<Integer> dataArray = intent.getIntegerArrayListExtra("data");
+							byte[] srcData = intent.getByteArrayExtra("srcData");
             }
         }
     };
