@@ -115,7 +115,11 @@ public class WalleBleService extends Service {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
-                LogUtil.i(TAG, "成功连接设备 ,name:" + gatt.getDevice().getName() + " address:" + gatt.getDevice().getAddress());
+                String bleName = gatt.getDevice().getName();
+                String bleAddress = gatt.getDevice().getAddress();
+                BleUtil.bleName = bleName;
+                BleUtil.bleAddress = bleName;
+                LogUtil.i(TAG, "成功连接设备 ,name:" + bleName + " address:" + bleAddress);
                 LogUtil.d(TAG, "Attempting to start service discovery:" + mBluetoothGatt.discoverServices());
                 Intent intent = new Intent(intentAction);
                 sendBroadcast(intent);
@@ -123,6 +127,8 @@ public class WalleBleService extends Service {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
                 BleUtil.bleConnected = false;
+                BleUtil.bleName = null;
+                BleUtil.bleAddress = null;
                 LogUtil.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -213,7 +219,7 @@ public class WalleBleService extends Service {
         }
 
         // Previously connected device.  Try to reconnect.
-        if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
+       /* if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
             LogUtil.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
@@ -224,7 +230,7 @@ public class WalleBleService extends Service {
                 checkConnectStatus();
                 return false;
             }
-        }
+        }*/
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
@@ -261,6 +267,7 @@ public class WalleBleService extends Service {
             return;
         }
         mBluetoothGatt.disconnect();
+        mBluetoothGatt = null;
         artificialDisconnect = true;
         notifyBluetoothGattCharacteristic = null;
     }

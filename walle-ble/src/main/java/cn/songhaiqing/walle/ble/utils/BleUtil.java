@@ -7,6 +7,8 @@ import cn.songhaiqing.walle.core.utils.LogUtil;
 
 public class BleUtil {
     public static boolean bleConnected = false;
+    public static String bleAddress ;
+    public static String bleName;
 
     public static boolean connectDevice(final Context context, String name, final String address) {
         Intent intent = new Intent(context,WalleBleService.class);

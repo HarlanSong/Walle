@@ -99,7 +99,12 @@ BleUtil.broadcastReadBle(Context context, byte[] bytes, String serviceUUID,
 
 ### 判断设备是否连接
 ```java
+// 是否已经连接
 BleUtil.bleConnected
+// 已连接设备MAC地址
+BleUtil.bleAddress
+// 已连接设备名称
+BleUtil.bleName
 ```
 
 ### 配置
@@ -113,6 +118,11 @@ WalleConfig.setDebug(boolean isDebug);
 
 ##更新日志
 
+**1.0.5(20180904)**
+* 修复再次连接蓝牙设备慢后失败问题
+* BleUtil添加已连接设备信息（mac地址、名称）
+
 **1.0.4(20180903)**
 * 删除项目自动生成的无用库，及删除测试模块代码。
 * 引用的核心库升级至1.0.1。
+
