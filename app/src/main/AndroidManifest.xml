@@ -21,9 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BleActivity"/>
-        <activity android:name=".ChoosePhotoActivity"/>
-
+        <activity android:name=".BleActivity" />
+        <activity android:name=".ChoosePhotoActivity" />
+        <activity android:name=".UIActivity"></activity>
     </application>
 
 </manifest>

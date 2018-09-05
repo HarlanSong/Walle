@@ -1,8 +1,16 @@
 <resources>
-    <string name="app_name">Walle</string>
+    <string name="app_name">Walle demo</string>
     <string name="func_ble">蓝牙</string>
     <string name="func_choose_photo">选择照片</string>
     <string name="ble_scan">扫描</string>
     <string name="ble_disconnect">断开连接</string>
     <string name="title_walle_bluetooth">蓝牙</string>
+    <string name="func_ui">UI</string>
+    <string name="title_activity_ui">UI</string>
+    <string name="dialog_confirm">确认弹窗</string>
+    <string name="dialog_alert">提示弹窗</string>
+    <string name="dialog_btn_confirm">确认</string>
+    <string name="dialog_btn_cancel">取消</string>
+    <string name="dialog_title">标题</string>
+    <string name="dialog_message">这是消息内容</string>
 </resources>

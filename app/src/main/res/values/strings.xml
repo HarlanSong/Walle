@@ -1,8 +1,17 @@
 <resources>
-    <string name="app_name">Walle</string>
+    <string name="app_name">Walle Demo</string>
     <string name="func_ble">Bluetooth</string>
     <string name="func_choose_photo">Choose Photo</string>
+    <string name="func_ui">UI</string>
     <string name="ble_scan">Scan</string>
     <string name="ble_disconnect">Disconnect</string>
     <string name="title_walle_bluetooth">Walle bluetooth</string>
+    <string name="title_activity_ui">UI</string>
+    <string name="dialog_confirm">Confirm dialog</string>
+    <string name="dialog_alert">Alter dialog</string>
+    <string name="dialog_btn_confirm">Confirm</string>
+    <string name="dialog_btn_cancel">Cancel</string>
+    <string name="dialog_title">Title</string>
+    <string name="dialog_message">This is message content.</string>
+
 </resources>

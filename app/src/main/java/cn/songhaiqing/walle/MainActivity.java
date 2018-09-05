@@ -18,7 +18,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WalleConfig.setDebug(true);
-        initTitle(null,getString(R.string.app_name),null);
+        initTitle(null, getString(R.string.app_name), null);
     }
 
     public void onBle(View view) {
@@ -27,5 +27,9 @@ public class MainActivity extends BaseActivity {
 
     public void onChoosePhoto(View view) {
         startActivity(new Intent(this, ChoosePhotoActivity.class));
+    }
+
+    public void onUI(View view) {
+        startActivity(new Intent(this, UIActivity.class));
     }
 }

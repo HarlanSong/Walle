@@ -17,4 +17,10 @@
        android:layout_height="wrap_content"
        android:onClick="onChoosePhoto"/>
 
+   <Button
+       android:text="@string/func_ui"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:onClick="onUI"/>
+
 </LinearLayout>
