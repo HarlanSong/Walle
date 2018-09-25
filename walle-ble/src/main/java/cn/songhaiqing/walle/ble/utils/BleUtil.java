@@ -2,18 +2,18 @@ package cn.songhaiqing.walle.ble.utils;
 
 import android.content.Context;
 import android.content.Intent;
+
 import cn.songhaiqing.walle.ble.service.WalleBleService;
-import cn.songhaiqing.walle.core.utils.LogUtil;
 
 public class BleUtil {
     public static boolean bleConnected = false;
-    public static String bleAddress ;
+    public static String bleAddress;
     public static String bleName;
 
     public static boolean connectDevice(final Context context, String name, final String address) {
-        Intent intent = new Intent(context,WalleBleService.class);
+        Intent intent = new Intent(context, WalleBleService.class);
         context.startService(intent);
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -30,15 +30,15 @@ public class BleUtil {
         return true;
     }
 
-    public static void disConnect(Context context){
+    public static void disConnect(Context context) {
         Intent intent = new Intent(WalleBleService.ACTION_DISCONNECT_DEVICE);
         context.sendBroadcast(intent);
     }
 
     public static void broadcastReadBle(Context context, byte[] bytes, String serviceUUID,
                                         String characteristicUUID) {
-        if(!bleConnected){
-            return ;
+        if (!bleConnected) {
+            return;
         }
         Intent intent = new Intent(WalleBleService.ACTION_READ_BLE);
         intent.putExtra(WalleBleService.EXTRA_DATA_READ_SERVICE_UUID, serviceUUID);
@@ -50,8 +50,17 @@ public class BleUtil {
     public static void broadcastWriteBle(Context context, String notifyServiceUUID,
                                          String notifyCharacteristicUUID, String writeServiceUUID,
                                          String writeCharacteristicUUID, byte[] bytes) {
-        if(!bleConnected){
-            return ;
+        if (!bleConnected) {
+            return;
+        }
+        broadcastWriteBle(context,notifyServiceUUID,notifyCharacteristicUUID,writeServiceUUID,writeCharacteristicUUID,bytes,true);
+    }
+
+    public static void broadcastWriteBle(Context context, String notifyServiceUUID,
+                                         String notifyCharacteristicUUID, String writeServiceUUID,
+                                         String writeCharacteristicUUID, byte[] bytes, boolean segmentation) {
+        if (!bleConnected) {
+            return;
         }
         Intent intent = new Intent(WalleBleService.ACTION_WRITE_BLE);
         intent.putExtra(WalleBleService.EXTRA_DATA_NOTIFY_SERVICE_UUID, notifyServiceUUID);
@@ -59,6 +68,7 @@ public class BleUtil {
         intent.putExtra(WalleBleService.EXTRA_DATA_WRITE_SERVICE_UUID, writeServiceUUID);
         intent.putExtra(WalleBleService.EXTRA_DATA_WRITE_CHARACTERISTIC_UUID, writeCharacteristicUUID);
         intent.putExtra(WalleBleService.EXTRA_DATA, bytes);
+        intent.putExtra(WalleBleService.EXTRA_DATA_WRITE_SEGMENTATION, segmentation);
         context.sendBroadcast(intent);
     }
 }

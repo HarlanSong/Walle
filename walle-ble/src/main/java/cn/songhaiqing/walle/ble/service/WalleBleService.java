@@ -17,12 +17,13 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import cn.songhaiqing.walle.ble.utils.BleUtil;
-import cn.songhaiqing.walle.core.utils.LogUtil;
-import cn.songhaiqing.walle.core.utils.StringUtil;
+import cn.songhaiqing.walle.ble.utils.LogUtil;
+import cn.songhaiqing.walle.ble.utils.StringUtil;
 
 public class WalleBleService extends Service {
     private final String TAG = getClass().getName();
@@ -55,6 +56,7 @@ public class WalleBleService extends Service {
     public final static String EXTRA_DATA_NOTIFY_CHARACTERISTIC_UUID = "EXTRA_DATA_NOTIFY_CHARACTERISTIC_UUID";
     public final static String EXTRA_DATA_WRITE_SERVICE_UUID = "EXTRA_DATA_WRITE_SERVICE_UUID";
     public final static String EXTRA_DATA_WRITE_CHARACTERISTIC_UUID = "EXTRA_DATA_WRITE_CHARACTERISTIC_UUID";
+    public final static String EXTRA_DATA_WRITE_SEGMENTATION = "EXTRA_DATA_WRITE_SEGMENTATION";
     public final static String EXTRA_DATA_READ_SERVICE_UUID = "EXTRA_DATA_READ_SERVICE_UUID";
     public final static String EXTRA_DATA_READ_CHARACTERISTIC_UUID = "EXTRA_DATA_READ_CHARACTERISTIC_UUID";
 
@@ -65,7 +67,7 @@ public class WalleBleService extends Service {
     private boolean operationDone = true;
     private boolean artificialDisconnect = true;
     private final int maxReconnectionNumber = 3;
-    private  int reconnectionNumber = 0;
+    private int reconnectionNumber = 0;
 
     @Override
     public void onCreate() {
@@ -101,8 +103,9 @@ public class WalleBleService extends Service {
                 String notifyCharacteristicUUID = intent.getStringExtra(EXTRA_DATA_NOTIFY_CHARACTERISTIC_UUID);
                 String writeServiceUUID = intent.getStringExtra(EXTRA_DATA_WRITE_SERVICE_UUID);
                 String writeCharacteristicUUID = intent.getStringExtra(EXTRA_DATA_WRITE_CHARACTERISTIC_UUID);
+                boolean segmentationContent = intent.getBooleanExtra(EXTRA_DATA_WRITE_SEGMENTATION, true);
                 byte[] data = intent.getByteArrayExtra(EXTRA_DATA);
-                writeBluetooth(notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, data);
+                writeBluetooth(notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, data, segmentationContent);
             }
         }
     };
@@ -206,7 +209,7 @@ public class WalleBleService extends Service {
         if (!initialize()) {
             return false;
         }
-        if(BleUtil.bleConnected && address.equals(mBluetoothDeviceAddress)){
+        if (BleUtil.bleConnected && address.equals(mBluetoothDeviceAddress)) {
             return true;
         }
         LogUtil.d(TAG, "Start connect device,macAddress:" + address);
@@ -317,12 +320,12 @@ public class WalleBleService extends Service {
     private void bluetoothUpdate(BluetoothGattCharacteristic characteristic) {
         String uuid = characteristic.getUuid().toString();
         String dataUINT16Str = StringUtil.bytesToHexStr(characteristic.getValue());
-        ArrayList<Integer> dataArray = new ArrayList<>(StringUtil.bytesToArrayList(characteristic.getValue())) ;
+        ArrayList<Integer> dataArray = new ArrayList<>(StringUtil.bytesToArrayList(characteristic.getValue()));
         LogUtil.i(TAG, "Result Data:" + dataUINT16Str + " size:" + dataArray.size());
         Intent intent = new Intent(ACTION_DEVICE_RESULT);
-        intent.putExtra("uuid",uuid);
-        intent.putExtra("data",dataArray);
-        intent.putExtra("srcData",characteristic.getValue());
+        intent.putExtra("uuid", uuid);
+        intent.putExtra("data", dataArray);
+        intent.putExtra("srcData", characteristic.getValue());
         sendBroadcast(intent);
     }
 
@@ -344,6 +347,7 @@ public class WalleBleService extends Service {
 
     private void writeAndNotify(String notifyServiceUUID, String notifyCharacteristicUUID, final String writeServiceUUID,
                                 final String writeCharacteristicUUID, final byte[] writeData) {
+        LogUtil.d(TAG, "Write Data:" + StringUtil.bytesToHexStr(writeData));
         if (!isConnected()) {
             LogUtil.w(TAG, "Bluetooth  not connected");
             return;
@@ -387,10 +391,11 @@ public class WalleBleService extends Service {
     }
 
     protected void writeBluetooth(final String notifyServiceUUID, final String notifyCharacteristicUUID,
-                                  final String writeServiceUUID, final String writeCharacteristicUUID, final byte[] content) {
-        LogUtil.d(TAG, "Write Data:" + StringUtil.bytesToHexStr(content));
+                                  final String writeServiceUUID, final String writeCharacteristicUUID,
+                                  final byte[] content, boolean segmentationContent) {
+
         final int maxLength = 20;
-        if (content.length <= maxLength) {
+        if (content.length <= maxLength || !segmentationContent) {
             writeAndNotify(notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, content);
             return;
         }
@@ -450,6 +455,7 @@ public class WalleBleService extends Service {
             operationDone = true;
         }
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
