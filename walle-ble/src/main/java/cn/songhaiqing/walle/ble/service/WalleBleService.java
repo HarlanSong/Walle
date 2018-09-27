@@ -24,6 +24,7 @@ import java.util.UUID;
 import cn.songhaiqing.walle.ble.utils.BleUtil;
 import cn.songhaiqing.walle.ble.utils.LogUtil;
 import cn.songhaiqing.walle.ble.utils.StringUtil;
+import cn.songhaiqing.walle.ble.utils.WalleBleConfig;
 
 public class WalleBleService extends Service {
     private final String TAG = getClass().getName();
@@ -68,6 +69,7 @@ public class WalleBleService extends Service {
     private boolean artificialDisconnect = true;
     private final int maxReconnectionNumber = 3;
     private int reconnectionNumber = 0;
+    final int maxLength = 20;
 
     @Override
     public void onCreate() {
@@ -297,14 +299,13 @@ public class WalleBleService extends Service {
             }
             return;
         }
-        final int maxRetryNumber = 4;
-        if (retryNumber <= maxRetryNumber) {
+        if (WalleBleConfig.getMaxRetryNumber() > 0 && retryNumber <= WalleBleConfig.getMaxRetryNumber()) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     readCharacteristic(characteristic, retryNumber + 1);
                 }
-            }, 2000);
+            }, WalleBleConfig.getRetrySleepTime());
         } else if (!operationDone) {
             broadcastUpdate(ACTION_EXECUTED_FAILED);
             operationDone = true;
@@ -394,7 +395,7 @@ public class WalleBleService extends Service {
                                   final String writeServiceUUID, final String writeCharacteristicUUID,
                                   final byte[] content, boolean segmentationContent) {
 
-        final int maxLength = 20;
+
         if (content.length <= maxLength || !segmentationContent) {
             writeAndNotify(notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, content);
             return;
@@ -403,29 +404,44 @@ public class WalleBleService extends Service {
             @Override
             public void run() {
                 super.run();
-                int length = content.length / maxLength;
-                for (int i = 0; i < length; i++) {
-                    if (i > 0) {
+                boolean exist = true;
+                int index = 0;
+                int segmentationIndex = 0;
+                while(exist){
+                    if (index > 0 && WalleBleConfig.getSegmentationSleepTime() > 0) {
                         try {
-                            sleep(2000);
+                            sleep(WalleBleConfig.getSegmentationSleepTime());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    byte[] byteTag = new byte[maxLength];
-                    System.arraycopy(content, i * maxLength, byteTag, 0, maxLength);
+                    int size;
+                    byte[] byteTag;
+                    if(WalleBleConfig.isSegmentationAddIndex() && index > 0){
+                        if(index + maxLength - 1 <= content.length){
+                            size = maxLength;
+                        }else{
+                            size = content.length - index + 1;
+                        }
+                        byteTag = new byte[size];
+                        byteTag[0] = (byte) segmentationIndex;
+                        System.arraycopy(content, index , byteTag, 1, byteTag.length - 1);
+                        segmentationIndex++;
+                        index += size - 1;
+                    }else {
+                        if(index + maxLength <= content.length){
+                            size = maxLength;
+                        }else{
+                            size = content.length - index;
+                        }
+                        byteTag = new byte[size];
+                        System.arraycopy(content, index , byteTag, 0, byteTag.length);
+                        index += size;
+                    }
                     writeAndNotify(notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, byteTag);
-                }
-                int lastLength = content.length % maxLength;
-                try {
-                    sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (lastLength != 0) {
-                    byte[] byteTag = new byte[lastLength];
-                    System.arraycopy(content, length * maxLength, byteTag, 0, lastLength);
-                    writeAndNotify(notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, byteTag);
+                    if(index >= content.length){
+                        exist = false;
+                    }
                 }
             }
         }.start();
@@ -433,7 +449,6 @@ public class WalleBleService extends Service {
 
     private void writeCharacteristic(final BluetoothGattCharacteristic bluetoothGattCharacteristic, final int retryNumber) {
         boolean status = mBluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
-        final int maxRetryNumber = 3;
         if (status) {
             LogUtil.d(TAG, "Bluetooth write success");
             if (!operationDone) {
@@ -443,13 +458,13 @@ public class WalleBleService extends Service {
             return;
         }
         LogUtil.e(TAG, "Bluetooth write failed , retryNumber:" + retryNumber);
-        if (retryNumber <= maxRetryNumber) {
+        if (WalleBleConfig.getMaxRetryNumber() > 0 && retryNumber <= WalleBleConfig.getMaxRetryNumber()) {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     writeCharacteristic(bluetoothGattCharacteristic, retryNumber + 1);
                 }
-            }, 1000);
+            }, WalleBleConfig.getRetrySleepTime());
         } else if (!operationDone) {
             broadcastUpdate(ACTION_EXECUTED_FAILED);
             operationDone = true;
