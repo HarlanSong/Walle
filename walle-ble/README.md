@@ -5,7 +5,7 @@
 ### Gradle 引入库
 
 ```groovy
-implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.5'
+implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.8'
 ```
 
 ### 添加权限
@@ -19,7 +19,7 @@ implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.5'
 ## 使用文档
 ### 打开扫描界面
 
-![BleScan](https://github.com/HarlanSong/Walle/tree/master/images/bleScan.png)
+ ![BleScan](https://github.com/HarlanSong/Walle/blob/master/images/bleScan.png?raw=true){:height="50%" width="50%"}
 
 ```java
 Intent intent = new Intent(this, DeviceScanActivity.class);
@@ -89,8 +89,7 @@ BleUtil.disConnect(this);
 ### 仅读取取设备数据
 
 ```java
-BleUtil.broadcastReadBle(Context context, byte[] bytes, String serviceUUID,
-                                        String characteristicUUID);
+BleUtil.broadcastReadBle(Context context, byte[] bytes, String serviceUUID,String characteristicUUID);
 ```
 
 *  context 上下文
@@ -111,12 +110,32 @@ BleUtil.bleName
 
 ```java
 // Log前缀，默认为“Walle”
-WalleConfig.setLogTag(String tag);
+WalleBleConfig.setLogTag(String tag)
+
 // 是否开户DEBUG模式，默认false
-WalleConfig.setDebug(boolean isDebug);
+WalleBleConfig.setDebug(boolean isDebug)
+
+// 命令发送失败最多重试次数(默认 3)
+WalleBleConfig.setMaxRetryNumber(int maxRetryNumber)
+
+// 分包时是否从第二个包开始在第0位添加序号，默认false
+WalleBleConfig.setSegmentationAddIndex(boolean segmentationAddIndex)
+
+// 分包发送间隔时间（毫秒）
+WalleBleConfig.setSegmentationSleepTime(int segmentationSleepTime)
 ```
 
-##更新日志
+
+
+## 更新日志
+**1.0.8(20180727)**
+* [添加] 支持分包时在第0位添加序号，从第二个包开始。
+
+**1.0.7(20180726)**
+* [添加] 配置分包等待时间（毫秒）
+* [添加] 配置发送命令失败重试时间（毫秒）
+* [添加] 配置发送命令失败重试次数
+
 **1.0.6(20180925)**
 * 发布蓝牙命令支持不截断发送
 * 删除walle-core的依赖
