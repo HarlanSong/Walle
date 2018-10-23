@@ -17,7 +17,6 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.TextUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -134,6 +133,7 @@ public class WalleBleService extends Service {
                 BleUtil.bleConnected = false;
                 BleUtil.bleName = null;
                 BleUtil.bleAddress = null;
+                BleUtil.setConnectStatus(BleUtil.CONNECT_STATUS_NOT_CONNECTED);
                 LogUtil.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -144,6 +144,7 @@ public class WalleBleService extends Service {
             LogUtil.d(TAG, "onServicesDiscovered status:" + status);
             if (status == BluetoothGatt.GATT_SUCCESS && isConnected()) {
                 BleUtil.bleConnected = true;
+                BleUtil.setConnectStatus(BleUtil.CONNECT_STATUS_SUCCESS);
                 broadcastUpdate(ACTION_CONNECTED_SUCCESS);
             } else {
                 LogUtil.w(TAG, "onServicesDiscovered received: " + status);
@@ -208,7 +209,9 @@ public class WalleBleService extends Service {
     }
 
     private boolean connect(final String address) {
+        BleUtil.setConnectStatus(BleUtil.CONNECT_STATUS_CONNECTING);
         if (!initialize()) {
+            BleUtil.setConnectStatus(BleUtil.CONNECT_STATUS_FAIL);
             return false;
         }
         if (BleUtil.bleConnected && address.equals(mBluetoothDeviceAddress)) {
@@ -261,6 +264,8 @@ public class WalleBleService extends Service {
                 if (!artificialDisconnect && !isConnected() && !TextUtils.isEmpty(mBluetoothDeviceAddress) && reconnectionNumber < maxReconnectionNumber) {
                     reconnectionNumber++;
                     connect(mBluetoothDeviceAddress);
+                }else{
+                    BleUtil.setConnectStatus(BleUtil.CONNECT_STATUS_FAIL);
                 }
             }
         }, 10000);
@@ -479,7 +484,9 @@ public class WalleBleService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        LogUtil.d(TAG, "WalleBleService onDestroy");
         unregisterReceiver(broadcastReceiver);
         close();
+        BleUtil.setConnectStatus(BleUtil.CONNECT_STATUS_NOT_CONNECTED);
     }
 }

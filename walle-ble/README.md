@@ -19,7 +19,7 @@ implementation 'cn.songhaiqing.walle.ble:walle-ble:1.0.8'
 ## 使用文档
 ### 打开扫描界面
 
- ![BleScan](https://github.com/HarlanSong/Walle/blob/master/images/bleScan.png?raw=true){:height="50%" width="50%"}
+ ![img](https://github.com/HarlanSong/Walle/blob/master/images/bleScan.png?raw=true)
 
 ```java
 Intent intent = new Intent(this, DeviceScanActivity.class);
@@ -45,6 +45,7 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ### 断开连接
 
 ```java
+
 BleUtil.disConnect(this);
 ```
 
@@ -98,12 +99,26 @@ BleUtil.broadcastReadBle(Context context, byte[] bytes, String serviceUUID,Strin
 
 ### 判断设备是否连接
 ```java
-// 是否已经连接
-BleUtil.bleConnected
+/**
+* 读取连接状态
+* 返回：BleUtil
+* CONNECT_STATUS_NOT_CONNECTED  未连接
+* CONNECT_STATUS_CONNECTING 连接中
+* CONNECT_STATUS_SUCCESS 连接成功
+* CONNECT_STATUS_FAIL 连接失败
+**/
+
+getConnectStatus(Context context)
+
+// 是否已经连接（过时）
+BleUtil.bleConnected （过时）
+
 // 已连接设备MAC地址
 BleUtil.bleAddress
+
 // 已连接设备名称
 BleUtil.bleName
+
 ```
 
 ### 配置
@@ -128,6 +143,12 @@ WalleBleConfig.setSegmentationSleepTime(int segmentationSleepTime)
 
 
 ## 更新日志
+
+**1.0.9(20181023)**
+* 添加蓝牙状态连接中的判断 
+* 断开连接后关闭服务节省消耗
+* 修复蓝牙服务被系统结束后的蓝牙状态判断错误问题。
+
 **1.0.8(20180727)**
 * [添加] 支持分包时在第0位添加序号，从第二个包开始。
 

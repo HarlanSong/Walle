@@ -2,42 +2,57 @@ package cn.songhaiqing.walle.ble.utils;
 
 import android.content.Context;
 import android.content.Intent;
-
 import cn.songhaiqing.walle.ble.service.WalleBleService;
 
 public class BleUtil {
+    @Deprecated
     public static boolean bleConnected = false;
+
+    private static int connectStatus = 0;
+    public static final int CONNECT_STATUS_NOT_CONNECTED = 0;
+    public static final int CONNECT_STATUS_CONNECTING = 1;
+    public static final int CONNECT_STATUS_SUCCESS = 2;
+    public static final int CONNECT_STATUS_FAIL = 3;
+
     public static String bleAddress;
     public static String bleName;
 
     public static boolean connectDevice(final Context context, String name, final String address) {
-        Intent intent = new Intent(context, WalleBleService.class);
-        context.startService(intent);
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    sleep(100);
-                } catch (InterruptedException e) {
-                    LogUtil.e("BleUtil", e.getMessage());
+        if (!ToolUtil.isServiceRunning(WalleBleService.class.getName(), context)) {
+            Intent intent = new Intent(context, WalleBleService.class);
+            context.startService(intent);
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    try {
+                        sleep(100);
+                    } catch (InterruptedException e) {
+                        LogUtil.e("BleUtil", e.getMessage());
+                    }
+                    Intent intent = new Intent(WalleBleService.ACTION_CONNECT_DEVICE);
+                    intent.putExtra(WalleBleService.EXTRA_DATA, address);
+                    context.sendBroadcast(intent);
                 }
-                Intent intent = new Intent(WalleBleService.ACTION_CONNECT_DEVICE);
-                intent.putExtra(WalleBleService.EXTRA_DATA, address);
-                context.sendBroadcast(intent);
-            }
-        }.start();
+            }.start();
+        } else {
+            Intent intent = new Intent(WalleBleService.ACTION_CONNECT_DEVICE);
+            intent.putExtra(WalleBleService.EXTRA_DATA, address);
+            context.sendBroadcast(intent);
+        }
         return true;
     }
 
     public static void disConnect(Context context) {
         Intent intent = new Intent(WalleBleService.ACTION_DISCONNECT_DEVICE);
         context.sendBroadcast(intent);
+        intent = new Intent(context, WalleBleService.class);
+        context.stopService(intent);
     }
 
     public static void broadcastReadBle(Context context, byte[] bytes, String serviceUUID,
                                         String characteristicUUID) {
-        if (!bleConnected) {
+        if (getConnectStatus(context) != CONNECT_STATUS_SUCCESS) {
             return;
         }
         Intent intent = new Intent(WalleBleService.ACTION_READ_BLE);
@@ -50,16 +65,16 @@ public class BleUtil {
     public static void broadcastWriteBle(Context context, String notifyServiceUUID,
                                          String notifyCharacteristicUUID, String writeServiceUUID,
                                          String writeCharacteristicUUID, byte[] bytes) {
-        if (!bleConnected) {
+        if (getConnectStatus(context) != CONNECT_STATUS_SUCCESS) {
             return;
         }
-        broadcastWriteBle(context,notifyServiceUUID,notifyCharacteristicUUID,writeServiceUUID,writeCharacteristicUUID,bytes,true);
+        broadcastWriteBle(context, notifyServiceUUID, notifyCharacteristicUUID, writeServiceUUID, writeCharacteristicUUID, bytes, true);
     }
 
     public static void broadcastWriteBle(Context context, String notifyServiceUUID,
                                          String notifyCharacteristicUUID, String writeServiceUUID,
                                          String writeCharacteristicUUID, byte[] bytes, boolean segmentation) {
-        if (!bleConnected) {
+        if (getConnectStatus(context) != CONNECT_STATUS_SUCCESS) {
             return;
         }
         Intent intent = new Intent(WalleBleService.ACTION_WRITE_BLE);
@@ -70,5 +85,16 @@ public class BleUtil {
         intent.putExtra(WalleBleService.EXTRA_DATA, bytes);
         intent.putExtra(WalleBleService.EXTRA_DATA_WRITE_SEGMENTATION, segmentation);
         context.sendBroadcast(intent);
+    }
+
+    public static int getConnectStatus(Context context) {
+        if (connectStatus == CONNECT_STATUS_SUCCESS && !ToolUtil.isServiceRunning(WalleBleService.class.getName(), context)) {
+            connectStatus = CONNECT_STATUS_NOT_CONNECTED;
+        }
+        return connectStatus;
+    }
+
+    public static void setConnectStatus(int connectStatus) {
+        BleUtil.connectStatus = connectStatus;
     }
 }

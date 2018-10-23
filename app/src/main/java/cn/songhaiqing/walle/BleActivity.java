@@ -52,6 +52,7 @@ public class BleActivity extends BaseActivity implements View.OnClickListener {
             } else if (WalleBleService.ACTION_DEVICE_RESULT.equals(action)) {
 
             }
+            Toast.makeText(BleActivity.this,"DeivceStatus:" + BleUtil.getConnectStatus(getBaseContext()),Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -63,9 +64,9 @@ public class BleActivity extends BaseActivity implements View.OnClickListener {
             String macAddress = data.getStringExtra("macAddress");
             Toast.makeText(this, "name:" + name + " macAddress:" + macAddress, Toast.LENGTH_LONG).show();
             BleUtil.connectDevice(this, name, macAddress);
+
         }
     }
-
 
     @Override
     protected void onDestroy() {
